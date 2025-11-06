@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC EPFO: EO/AO & APFC Most Expected Questions Set - 1 (Excluding Special Subjects)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-card, .result-card {
+            background-color: #f9fafb;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .quiz-option {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: left;
+        }
+
+        .quiz-option:hover:not(.selected):not(.correct):not(.incorrect) {
+            background-color: #d1d5db;
+        }
+
+        .quiz-option.selected {
+            background-color: #93c5fd;
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .quiz-option.correct {
+            background-color: #a7f3d0;
+            color: #065f46;
+            font-weight: 600;
+            border-color: #10b981;
+        }
+
+        .quiz-option.incorrect {
+            background-color: #fecaca;
+            color: #991b1b;
+            font-weight: 600;
+            border-color: #ef4444;
+        }
+
+        .correct-prompt {
+            color: #10b981;
+        }
+
+        .incorrect-prompt {
+            color: #ef4444;
+        }
+        
+        .option-text {
+            font-size: 0.95rem;
+        }
+
+        .statement-options .quiz-option {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+<div class="container">
+    <h1 class="text-3xl font-bold text-center mb-4">UPSC EPFO: EO/AO & APFC Most Expected Questions Set - 1 (Excluding Special Subjects)</h1>
+
+    <div class="text-center mb-6 p-3 bg-blue-50 rounded-lg border border-blue-200">
+        <p class="text-lg font-medium text-blue-800">
+            A Quiz by 
+            <a href="https://t.me/TheAspirantsGurukul" target="_blank" class="text-blue-600 hover:text-blue-700 font-bold underline transition-colors">
+                The Aspirants Gurukul
+            </a>
+        </p>
+    </div>
+
+    <div id="quiz-settings" class="space-y-6">
+        <h2 class="text-xl font-semibold text-center text-gray-700">Quiz Setup</h2>
+        <div class="space-y-4">
+            <div>
+                <label for="question-count" class="block text-sm font-medium text-gray-700 mb-1">Number of Questions (1-120):</label>
+                <input type="number" id="question-count" class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" value="120" min="1" max="120">
+            </div>
+            <div>
+                <label for="time-limit" class="block text-sm font-medium text-gray-700 mb-1">Time Limit (minutes, default: 120):</label>
+                <input type="number" id="time-limit" class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="120" min="1">
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <input type="radio" id="shuffle-mode" name="quiz-mode" value="shuffle" class="h-4 w-4 text-blue-600 focus:ring-blue-500" checked>
+            <label for="shuffle-mode" class="text-sm font-medium text-gray-700">Shuffle Questions</label>
+            
+            <input type="radio" id="normal-mode" name="quiz-mode" value="normal" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
+            <label for="normal-mode" class="text-sm font-medium text-gray-700">Chronological Order</label>
+        </div>
+        
+        <div class="text-center text-sm text-gray-500">
+            <p>Scoring: +2.5 for correct, -0.83 for incorrect.</p>
+        </div>
+        
+        <button id="start-quiz" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-md shadow-lg transition-colors">Start Quiz</button>
+    </div>
+
+    <div id="quiz-container" class="hidden">
+        <div class="flex items-center justify-between mb-4">
+            <p class="text-lg font-medium">Question <span id="question-serial-info"></span> <span id="question-year" class="text-sm text-gray-500"></span></p> 
+            <div class="flex items-center space-x-2">
+                <button id="pause-timer" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-1 px-3 rounded-full transition-colors">Pause</button>
+                <div class="font-bold text-lg flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span id="timer">00:00</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-card mb-4">
+            <h2 id="question-text" class="text-xl font-semibold mb-4"></h2>
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+        
+        <div id="explanation-container" class="hidden mt-6">
+            <h3 class="text-2xl font-bold mb-2"><span id="result-prompt"></span></h3>
+            <div id="explanation-text" class="p-4 rounded-md border"></div>
+        </div>
+        
+        <div class="flex justify-between items-center mt-6">
+            <button id="prev-question" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors">Previous</button>
+            <button id="exit-quiz-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors">Exit Quiz</button>
+            <button id="next-question" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-lg transition-colors">Next</button>
+        </div>
+    </div>
+
+    <div id="results-container" class="hidden result-card text-center">
+        <h2 class="text-2xl font-bold mb-4">Quiz Report Card</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-lg mb-6">
+            <div class="p-4 bg-gray-100 rounded-lg">
+                <p class="font-semibold text-blue-600" id="final-score">0.00</p>
+                <p class="text-sm text-gray-600">Final Score</p>
+            </div>
+            <div class="p-4 bg-gray-100 rounded-lg">
+                <p class="font-semibold text-green-600" id="correct-answers">0</p>
+                <p class="text-sm text-gray-600">Correct</p>
+            </div>
+            <div class="p-4 bg-gray-100 rounded-lg">
+                <p class="font-semibold text-red-600" id="incorrect-answers">0</p>
+                <p class="text-sm text-gray-600">Incorrect</p>
+            </div>
+             <div class="p-4 bg-gray-100 rounded-lg">
+                <p class="font-semibold text-gray-600" id="unattempted-questions">0</p>
+                <p class="text-sm text-gray-600">Unattempted</p>
+            </div>
+        </div>
+        <p class="text-md mb-6">Time taken: <span id="final-time-text" class="font-semibold"></span></p>
+        
+        <div id="report-card" class="text-left mt-6">
+            <h3 class="text-xl font-bold mb-3 text-center">Areas for Improvement</h3>
+            <ul id="improvement-list" class="list-disc list-inside space-y-2 text-gray-700"></ul>
+        </div>
+        
+        <div class="flex justify-center space-x-4 mt-8">
+            <a id="whatsapp-share" href="#" target="_blank" class="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-lg transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99 0-3.902-.539-5.586-1.54l-6.355 1.666zM5.973 19.591l.421.248c1.52 1.03 3.337 1.621 5.26 1.621 5.461 0 9.91-4.448 9.911-9.909s-4.449-9.909-9.91-9.909c-5.461 0-9.91 4.448-9.911 9.909.001 2.021.59 3.965 1.698 5.688l.288.423-1.094 3.999 4.052-1.066z"/></svg>
+                <span>WhatsApp</span>
+            </a>
+            <a id="telegram-share" href="#" target="_blank" class="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow-lg transition-colors">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12c0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12 12-5.373 12-12zM20.008 7.33l-1.966 9.1c-.183.84-.693.996-1.393.618l-4.425-3.264-2.152 2.072c-.22.213-.404.404-.817.404-.325 0-.575-.164-.784-.367l-2.05-1.97-3.957-2.92c-.749-.438-1.282-.208-1.482.693l-2.739 12.875 18.02-9.255z"/></svg>
+                <span>Telegram</span>
+            </a>
+        </div>
+        
+        <button id="restart-quiz" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md shadow-lg transition-colors">Start New Quiz</button>
+    </div>
+</div>
+
+<script>
+// The allQuestions array remains the same:
+document.addEventListener('DOMContentLoaded', () => {
+    const allQuestions = [
+        {
+            original_serial: 1,
+            question_text: "What is the indication out of the sentence: 'I gave him a piece of my mind'?",
+            options: ["(a) Appreciation", "(b) Warning", "(c) Greeting", "(d) Scolding"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The idiom 'to give someone a piece of your mind' means to speak angrily to someone because they have done something wrong. Therefore, it indicates a scolding.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 2,
+            question_text: "What is the meaning of the expression: 'Blue blood'?",
+            options: ["(a) Polluted industrial waste water", "(b) Sap of teak wood", "(c) An aristocrat", "(d) A costly object"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The term 'blue blood' is used to describe a person of noble or aristocratic descent.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 3,
+            question_text: "'He was hoist by his own petard' refers to",
+            options: ["(a) He had problems as a result of his own plans to hurt others", "(b) He was high up on the pole", "(c) He would usually run away from trouble", "(d) He was indifferent to his surroundings"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "This idiom means that someone's plan to cause trouble for others has backfired and caused problems for themselves.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 4,
+            question_text: "What is a Ballad?",
+            options: ["(a) A novel", "(b) A historical narration", "(c) A popular story or folktale in verse", "(d) Musical comedy"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "A ballad is a form of verse, often a narrative set to music. They derive from the medieval French 'chanson balladée' or 'ballade', which were originally 'danced songs'.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 5,
+            question_text: "Plagiarism means",
+            options: ["(a) There was an epidemic of plague in the area", "(b) It is a sort of political philosophy", "(c) It indicates a happy community spirit like in playing Holi", "(d) It is presenting the work of someone else as one's own"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Plagiarism is the act of taking someone else's work or ideas and passing them off as one's own.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 6,
+            question_text: "Rivalry between the two clans has become water under the bridge means",
+            options: ["(a) The rivalry continues", "(b) It has become a thing of the past", "(c) It connects the two clans", "(d) It is not forgotten"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "The idiom 'water under the bridge' refers to past events that are no longer considered important and have been forgiven or forgotten.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 7,
+            question_text: 'Consider the sentence: "The teacher gave me the book". Where shall this word \'only\' be inserted if the emphasis is to be (i) On the recipient (ii) On the uniqueness of the item given (iii) On the giver',
+            options: ["(a) (i) Between 3-4; (ii) After 6; (iii) Between 2-3", "(b) (i) Between 3-4; (ii) Between 5-6; (iii) Before 1", "(c) (i) Between 4-5; (ii) Between 3-4; (iii) After 1", "(d) (i) Between 2-3; (ii) Between 4-5; (iii) Between 1-2"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "(i) 'The teacher gave only me the book' emphasizes the recipient. (ii) 'The teacher gave me the only book' emphasizes the item. (iii) 'Only the teacher gave me the book' emphasizes the giver.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 8,
+            question_text: "What is the meaning of the term 'didactic'?",
+            options: ["(a) Intended to be inspirational", "(b) Teaching a moral lesson", "(c) Received as comical", "(d) Sharing an informative experience"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Didactic works are those that are intended to teach, particularly in having moral instruction as an ulterior motive.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 9,
+            question_text: 'Consider the statement "The message of peace and brotherhood permeated the address by the Chief Guest." Which of the following is meant by \'permeate\' in this statement?',
+            options: ["(a) To advocate", "(b) To spread all over", "(c) To anchor and stabilize", "(d) To leave a permanent impression"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Permeate means to spread throughout something; to pervade. In this context, the message of peace spread all over the address.",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 10,
+            question_text: "Arrange the following to form a grammatically correct sentence: 1. Einstein was 2. although a great scientist 3. weak in Arithmetic 4. right from his school days",
+            options: ["(a) 4, 1, 3 and 2", "(b) 2, 1, 3 and 4", "(c) 4, 3, 1 and 2", "(d) 2, 3, 1 and 4"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The correct sentence is: 'Although a great scientist, Einstein was weak in Arithmetic right from his school days'. The structure that represents this is (a).",
+            subject_area: "English Language"
+        },
+        {
+            original_serial: 11,
+            question_text: "What is the chronological sequence of the following events? 1. First Battle of Panipat 2. Vietnam War 3. French Revolution 4. First Gulf War 5. World War I",
+            options: ["(a) 1, 5, 3, 2 and 4", "(b) 3, 1, 5, 4 and 2", "(c) 3, 1, 4, 5 and 2", "(d) 1, 3, 5, 2 and 4"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The correct order is: First Battle of Panipat (1526), French Revolution (1789), World War I (1914), Vietnam War (1955), First Gulf War (1990). So the sequence is 1, 3, 5, 2, 4.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 12,
+            question_text: "A branch of scholarship that flourished in Europe, particularly from the fifteenth to the eighteenth centuries, and was devoted to the appreciation, chronicling and classification of historic and non-organic relics, monuments and old texts refers to",
+            options: ["(a) Archaeology", "(b) History", "(c) Architecture", "(d) Antiquarianism"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Antiquarianism refers to the study of antiquities, which includes ancient artifacts, historical sites, and old texts. This matches the description perfectly.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 13,
+            question_text: "Which of the following statements are correct in respect of 'Stridhana'? 1. Various types of movable property gifted to a woman on various occasions during her lifetime. 2. Various types of movable property gifted to a woman at the time of her first marriage. 3. On the woman's death, this wealth could be inherited by her children and husband. 4. On the woman's death, this wealth could be inherited by her natural legally adopted children, with none of the sons-in-law, having any claim on any part thereof.",
+            options: ["(a) 2 and 3 only", "(b) 2 and 4 only", "(c) 1 and 4 only", "(d) 1 and 3 only"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Stridhana is property gifted to a woman during her lifetime (1). On her death, it passes to her heirs, which includes her children and husband (3). Statement 2 is too restrictive, and statement 4 is incorrect about the husband's claim.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 14,
+            question_text: "What is the number of States and Union Territories in India?",
+            options: ["(a) 29 and 6", "(b) 28 and 7", "(c) 29 and 7", "(d) 28 and 6"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "As of 2016, India had 29 states (Telangana was formed in 2014) and 7 Union Territories.",
+            subject_area: "Indian Polity"
+        },
+        {
+            original_serial: 15,
+            question_text: "Which of the following is not true of the Western Ghats?",
+            options: ["(a) UNESCO declared 39 places in the Western Ghats as 'World Heritage Sites' in 2012", "(b) It is one of the eight hottest hotspots of biological diversity in the world", "(c) It has two reserves and thirteen national parks", "(d) ONGC surveys have recently found huge oil reserves"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "While there have been oil explorations, finding 'huge oil reserves' in the Western Ghats is not a widely established fact. The other three statements are well-documented facts about this biodiversity hotspot.",
+            subject_area: "Geography"
+        },
+        {
+            original_serial: 16,
+            question_text: "Ayodhya is located at the bank of which river?",
+            options: ["(a) Falgu", "(b) Ganga", "(c) Sarayu", "(d) Yamuna"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The ancient city of Ayodhya is situated on the banks of the Sarayu river in Uttar Pradesh.",
+            subject_area: "Geography"
+        },
+        {
+            original_serial: 17,
+            question_text: "The Khilafat Committee accepted Mahatma Gandhi's suggestion for a non-violent non-cooperation protest against the Government in its meeting at",
+            options: ["(a) Bombay", "(b) Nagpur", "(c) Allahabad", "(d) Kanpur"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The Khilafat Committee met in Allahabad in June 1920 and formally adopted the non-cooperation agenda, inviting Gandhi to lead the movement.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 18,
+            question_text: "What is Know India Programme (KIP)?",
+            options: ["(a) A programme for children aged 12-15 years from rural areas to make them aware of different aspects of India", "(b) A programme that facilitates visits of rural teachers to different parts of the country", "(c) An out-reach programme of the Ministry of External Affairs to build closer ties with India's neighbourhood", "(d) A programme for diaspora youth to promote awareness among them about different aspects of India"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The Know India Programme (KIP) is a flagship initiative of the Ministry of External Affairs for diaspora youth to promote awareness on different facets of life in India.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 19,
+            question_text: "What is the perimeter of the figure shown below?",
+            options: ["(a) 44 cm", "(b) 48 cm", "(c) 54 cm", "(d) 58 cm"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The sum of all horizontal segments equals the bottom length (12). The sum of all vertical segments equals the side length (10). The perimeter is 2 * (10 + 12) = 44 cm.",
+            subject_area: "Mathematics"
+        },
+        {
+            original_serial: 20,
+            question_text: "Special Economic Zones (SEZ) are developed to",
+            options: ["(a) Generate additional economic activity throughout the country", "(b) Beautify suburban areas", "(c) Upgrade the facilities in the countryside", "(d) Promote investment from domestic and foreign sources"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "SEZs are specifically designed to be engines for economic growth supported by quality infrastructure and an attractive fiscal package, with the primary goal of promoting investment, both domestic and foreign.",
+            subject_area: "Indian Economy"
+        },
+        {
+           original_serial: 21,
+            question_text: "Which of the following are the typical distinctive features about 6th century BCE Ganas or Sanghas? 1. The ancient Indian Ganas were oligarchies. 2. The ancient Indian Ganas were non-monarchical states. 3. Magadha, Kosala, Vatsa and Avanti were the most powerful States of that era. 4. The procedures of the Buddhist monastic order (Sangha) were patterned on the Sangha politics.",
+            options: ["(a) 1, 2 and 3 only", "(b) 1, 2 and 4 only", "(c) 3 and 4 only", "(d) 1, 2, 3 and 4"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Ganas/Sanghas were oligarchic (1) and non-monarchical (2). Buddhist monastic rules were modeled on their political procedures (4). Statement 3 describes the powerful monarchical Mahajanapadas, not the Ganas.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 22,
+            question_text: "What is the chronological sequence of the following developments? 1. Decline in the export of Indian cotton 2. Cotton boom in India 3. Civil War in America",
+            options: ["(a) 1, 3 and 2", "(b) 2, 3 and 1", "(c) 1, 2 and 3", "(d) 2, 1 and 3"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "The American Civil War (1861-1865) disrupted cotton supply, leading to a cotton boom in India (2). After the war, American cotton returned, causing a decline in Indian exports (1). Sequence: 2, 3, 1.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 23,
+            question_text: "Which of the following statements reflect the differences between the private insurance programmes and the social insurance programmes? 1. Adequacy versus Equity 2. Voluntary versus Mandatory Participation 3. Contractual versus Statutory Rights 4. Funding",
+            options: ["(a) 1, 2 and 3 only", "(b) 1, 2 and 4 only", "(c) 3 and 4 only", "(d) 1, 2, 3 and 4"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "All four points highlight key differences. Social insurance is mandatory, based on statutory rights, funded differently (often via taxes), and aims for adequacy. Private insurance is voluntary, contractual, and based on individual equity.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 24,
+            question_text: "'Unbalanced' Growth is hypothesized when",
+            options: ["(a) Expansion can take place simultaneously on several growth routes", "(b) Supply of labour is fixed", "(c) Supply of capital is unlimited", "(d) Active sectors need to, and do energize sluggish sectors"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The theory of unbalanced growth, proposed by Albert Hirschman, suggests that development should be concentrated in specific key sectors, which then pull other, more sluggish sectors forward.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 25,
+            question_text: "Which of the following are incorporated in the Government approved National Telecom Policy, 2012? 1. Broadband for all with a minimum download speed of two megabits per second 2. India's rural tele-density to be improved from 39% to 70% in the next five years 3. Roaming charges shall be scrapped",
+            options: ["(a) 1 and 2 only", "(b) 1 and 3 only", "(c) 2 and 3 only", "(d) 1, 2 and 3"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The National Telecom Policy of 2012 included ambitious goals like broadband for all, increasing rural tele-density, and moving towards a 'One Nation, One Number' system, which included scrapping roaming charges.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 26,
+            question_text: "Which of the following is one of the Millennium Development Goals fixed by the UNO?",
+            options: ["(a) Halving extreme poverty and halting the spread of HIV/AIDS", "(b) Develop a new variety of foodgrains which can ensure bumper crops", "(c) To ensure that population does not increase in the least developed countries", "(d) Develop procedures towards adequate and timely forewarning on hurricanes and tsunamis"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "MDG 1 was to eradicate extreme poverty and hunger, and MDG 6 was to combat HIV/AIDS, malaria, and other diseases. Option (a) combines elements of these goals.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 27,
+            question_text: "The term 'Carbon footprint' means",
+            options: ["(a) A region which is rich in coal mines", "(b) The amount of reduction in the emission of CO2 by a country", "(c) The use of Carbon in manufacturing industries", "(d) The amount of greenhouse gases produced by our day-to-day activities"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "A carbon footprint is the total amount of greenhouse gases (including carbon dioxide and methane) that are generated by our actions.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 28,
+            question_text: "Amongst the following, who is the latest recipient of the 'Bharat Ratna' award?",
+            options: ["(a) Sachin Tendulkar", "(b) Atal Bihari Vajpayee", "(c) Amartya Sen", "(d) A.P.J. Abdul Kalam"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Atal Bihari Vajpayee received the Bharat Ratna in 2015. Sachin Tendulkar received it in 2014. This question is based on the context of the 2016 exam.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 29,
+            question_text: "'Green Revolution' in India was expeditiously feasible in zones of",
+            options: ["(a) High rainfall", "(b) Moderate rainfall", "(c) Assured irrigation", "(d) Higher population density"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The high-yield variety seeds of the Green Revolution required controlled and assured water supply, making them most successful in areas with reliable irrigation, like Punjab and Haryana.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 30,
+            question_text: "What is Apartheid?",
+            options: ["(a) An international organization of peace", "(b) A medical term", "(c) A trade charter", "(d) A policy of racial segregation"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Apartheid was a system of institutionalised racial segregation that existed in South Africa and South West Africa (now Namibia) from 1948 until the early 1990s.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 31,
+            question_text: "Transportation plays a great role in any economy. Which of the following modes of transportation has the highest elasticity?",
+            options: ["(a) Air", "(b) Rail", "(c) Road", "(d) Water"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Air transport generally has the highest price elasticity of demand. It's often considered a luxury, and consumers are very sensitive to price changes, especially for leisure travel.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 32,
+            question_text: "How does an expansionary monetary policy affect the rate of interest and level of income?",
+            options: ["(a) Raises the level of income but lowers the rate of interest", "(b) Raises the rate of interest but lowers the level of income", "(c) Raises both, the rate of interest and the level of income", "(d) Lowers both, the rate ofinterest and the level of income"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "An expansionary monetary policy increases the money supply, which lowers the interest rate. Lower interest rates encourage investment and consumption, which raises the overall level of income.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 33,
+            question_text: "In a medium-size township, the trend of annual immigration is an addition of 20% of the population as it was at the beginning; also 15% of the population as it was at the beginning is estimated to relocate elsewhere every year. If the current population is 80000, what is the likely population three years hence?",
+            options: ["(a) 90000", "(b) 91200", "(c) 92000", "(d) 92610"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Net growth is 20% - 15% = 5% per year. The calculation is 80000 * (1.05)^3 = 80000 * 1.157625 = 92610.",
+            subject_area: "Mathematics"
+        },
+        {
+            original_serial: 34,
+            question_text: "The Problem of the Rupee' was whose DSc Thesis?",
+            options: ["(a) Sri Aurobindo", "(b) Dr. Rajendra Prasad", "(c) Pt. Jawaharlal Nehru", "(d) Dr. Bhimrao Ambedkar"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "'The Problem of the Rupee: Its Origin and Its Solution' was the title of Dr. B. R. Ambedkar's doctoral thesis, which he submitted to the London School of Economics.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 35,
+            question_text: "What is the correct sequence of tributaries of the river Ganga from West to East?",
+            options: ["(a) Yamuna, Ghaghara, Son, Gandak and Kosi", "(b) Ghaghara, Yamuna, Gandak, Kosi and Son", "(c) Yamuna, Ghaghara, Gandak, Son and Kosi", "(d) Son, Yamuna, Ghaghara, Gandak and Kosi"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The correct sequence of major tributaries joining the Ganga from west to east is Yamuna, then Ghaghara, followed by Son, Gandak, and finally Kosi further east.",
+            subject_area: "Geography"
+        },
+        {
+            original_serial: 36,
+            question_text: '"Swaraj is my birth right, and I shall have it" was a slogan raised by',
+            options: ["(a) Bhagat Singh", "(b) Bipin Chandra Pal", "(c) Bal Gangadhar Tilak", "(d) Lala Lajpat Rai"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "This famous slogan was coined by Bal Gangadhar Tilak, a prominent leader of the Indian independence movement.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 37,
+            question_text: "How does a bank earn its income?",
+            options: ["(a) By charging interest on the loans it provides", "(b) By charging a fee for providing services", "(c) By lending at a higher rate and borrowing at a lower rate", "(d) By accepting deposits on which no interest is payable"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The primary way banks earn income is through the 'spread' - the difference between the interest rate they pay for deposits (borrowing) and the higher interest rate they charge for loans (lending).",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 38,
+            question_text: "Under the Constitution of India, which of the following statements are correct? 1. The Constitution is supreme. 2. There is a clear division of powers between the Union and the State Governments. 3. Amendments to the Constitution have to follow the prescribed procedure. 4. The Union Parliament and the State Legislatures are sovereign. 5. The Preamble to the Constitution cannot be invoked to determine the ambit of Fundamental Rights.",
+            options: ["(a) 1, 2, 3 and 5 only", "(b) 1, 2 and 3 only", "(c) 1, 3 and 5 only", "(d) 2, 3 and 4 only"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "The Constitution is supreme (1), there is a division of powers (2), and amendments follow a procedure (3). However, Parliament is not sovereign (it's bound by the Constitution), and the Preamble can be used to interpret the Constitution (Kesavananda Bharati case).",
+            subject_area: "Indian Polity"
+        },
+        {
+            original_serial: 39,
+            question_text: "Which of the following is not a feature of a monopolistic market?",
+            options: ["(a) Homogeneous product", "(b) Differentiated products", "(c) Non-price competition", "(d) Free entry and exit"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Monopolistic competition is characterized by differentiated products, not homogeneous ones. Homogeneous products are a feature of perfect competition.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 40,
+            question_text: "Consider the following statements on Public Accounts Committee (PAC): 1. It consists of 15 members from Lok Sabha and 7 from Rajya Sabha. 2. The term of office of the members is one year. 3. The Finance Minister is an ex-officio member of this Committee. 4. Its task is to examine the report of the Comptroller and Auditor General of India.",
+            options: ["(a) 1, 2 and 3 only", "(b) 1, 2 and 4 only", "(c) 1, 3 and 4 only", "(d) 2, 3 and 4 only"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Statements 1, 2, and 4 are correct. The Finance Minister is not a member of the PAC; in fact, no minister can be a member of this committee.",
+            subject_area: "Indian Polity"
+        },
+        {
+            original_serial: 41,
+            question_text: "The first factory law in India was enacted in",
+            options: ["(a) 1881", "(b) 1891", "(c) 1901", "(d) 1911"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The First Factories Act was passed in 1881 during the tenure of Lord Ripon. It aimed to improve the working conditions of laborers.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 42,
+            question_text: "Which of the following is an example of an open economy?",
+            options: ["(a) An economy where domestic goods and services can be traded with foreign goods and services", "(b) An economy where no goods and services can be traded with foreign goods and services", "(c) An economy that is dependent on foreign trade", "(d) An economy that is independent of foreign trade"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "An open economy is one that engages in international trade of goods, services, and capital with other countries.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 43,
+            question_text: "Which of the following is the largest ecosystem on Earth?",
+            options: ["(a) Forest ecosystem", "(b) Ocean ecosystem", "(c) Grassland ecosystem", "(d) Desert ecosystem"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "The ocean ecosystem, also known as the marine or aquatic ecosystem, is the largest on Earth, covering over 70% of the planet's surface.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 44,
+            question_text: "Match List-I (Movement) with List-II (Leader) and select the correct answer: A. Khilafat Movement B. Quit India Movement C. Swadeshi Movement D. Non-Cooperation Movement | 1. Mahatma Gandhi 2. Shaukat Ali 3. Aurobindo Ghosh 4. Jawaharlal Nehru",
+            options: ["(a) A-2; B-4; C-3; D-1", "(b) A-4; B-2; C-1; D-3", "(c) A-2; B-1; C-3; D-4", "(d) A-3; B-4; C-2; D-1"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "Khilafat (Shaukat Ali), Quit India (Mahatma Gandhi), Swadeshi (Aurobindo Ghosh), Non-Cooperation (Jawaharlal Nehru was a key figure, but Gandhi was the primary leader). The best fit among options is C.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 45,
+            question_text: "Which of the following were the reasons for the failure of the 'Quit India Movement'? 1. The British repression 2. Lack of an organization 3. The League and the Hindu Mahasabha were not in favor of it",
+            options: ["(a) 1 and 2 only", "(b) 1, 2 and 3", "(c) 2 and 3 only", "(d) 1 and 3 only"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "The movement was met with severe British repression (1), it lacked central organization as most leaders were jailed (2), and key groups like the Muslim League and Hindu Mahasabha did not support it (3).",
+            subject_area: "History"
+        },
+        {
+            original_serial: 46,
+            question_text: "Which of the following are the objectives of the 12th Five Year Plan? 1. Faster, Sustainable and More Inclusive Growth 2. Providing access to banking services to 90% of Indian households 3. Improving the sex ratio to 950",
+            options: ["(a) 1 only", "(b) 1 and 2 only", "(c) 1 and 3 only", "(d) 1, 2 and 3"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The theme of the 12th Plan was 'Faster, More Inclusive and Sustainable Growth'. It also included monitorable targets like increasing banking access and improving the child sex ratio.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 47,
+            question_text: "'Project Loon', which has been in the news recently, is a",
+            options: ["(a) Google project for providing internet access to rural and remote areas", "(b) Google project to create virtual reality gaming platform", "(c) Microsoft project for developing 3-D printing technology", "(d) Apple project for developing a new mobile operating system"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Project Loon was a research and development project by Google's parent company, Alphabet, to provide internet access to rural and remote areas using high-altitude balloons.",
+            subject_area: "Science and Technology"
+        },
+        {
+            original_serial: 48,
+            question_text: "What is the approximate length of the coastline of India?",
+            options: ["(a) 5500 km", "(b) 6500 km", "(c) 7500 km", "(d) 8500 km"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The total length of India's coastline, including the mainland coast as well as the island groups of Andaman & Nicobar and Lakshadweep, is approximately 7516.6 km.",
+            subject_area: "Geography"
+        },
+        {
+            original_serial: 49,
+            question_text: "Consider the following statements about the 'Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA)': 1. It is a demand-driven scheme. 2. Every household in rural areas has a right to at least 100 days of guaranteed wage employment in a financial year. 3. The Gram Panchayat is the key implementing authority at the local level. 4. It is applicable only to the BPL households.",
+            options: ["(a) 1, 2 and 3 only", "(b) 1 and 4 only", "(c) 1, 2, 3 and 4", "(d) 2 and 3 only"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Statements 1, 2, and 3 are correct. Statement 4 is incorrect; MGNREGA is universal and available to any rural household that demands work, not just BPL families.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 50,
+            question_text: "Which of the following is a physical quantity?",
+            options: ["(a) Density", "(b) Pressure", "(c) Force", "(d) All of the above"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "A physical quantity is a property of a material or system that can be quantified by measurement. Density, pressure, and force are all measurable physical quantities.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 51,
+            question_text: "Which of the following is a characteristic of a perfectly competitive market?",
+            options: ["(a) Large number of firms", "(b) Price discrimination", "(c) High barriers to entry", "(d) Differentiated products"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Perfect competition is a market structure characterized by a large number of buyers and sellers, homogeneous products, and free entry and exit of firms.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 52,
+            question_text: "'Green GDP' is defined as",
+            options: ["(a) GDP on which a carbon tax is levied", "(b) A country's overall economic output after subtracting the environmental costs", "(c) GDP which is generated through eco-friendly projects", "(d) The GDP of a country which has banned the use of fossil fuels"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Green GDP is an index of economic growth with the environmental consequences of that growth factored into a country's conventional GDP.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 53,
+            question_text: "Match List-I (Author) with List-II (Book): A. Amartya Sen B. Thomas Piketty C. Joseph Stiglitz D. Paul Krugman | 1. The Great Divide 2. The Price of Inequality 3. The New Industrial State 4. An Uncertain Glory",
+            options: ["(a) A-4; B-1; C-2; D-3", "(b) A-4; B-3; C-1; D-2", "(c) A-3; B-1; C-2; D-4", "(d) This is a flawed question in the original paper."],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Amartya Sen wrote 'An Uncertain Glory'. Joseph Stiglitz wrote 'The Price of Inequality' and 'The Great Divide'. Paul Krugman did not write any of these. This question appears to have errors in its options.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 54,
+            question_text: "A person is sitting in a railway compartment. The motion of a coin dropped from his hand will be described as",
+            options: ["(a) A parabola for a person on the ground", "(b) A straight line for a person on the ground", "(c) A parabola for a person in the compartment", "(d) A straight line for a person in the compartment"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "To the person in the moving train, the coin appears to fall straight down. To an observer on the ground, the coin has both vertical motion (due to gravity) and horizontal motion (from the train), tracing a parabolic path.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 55,
+            question_text: "Which of the following is a correct statement about a 'Black Hole'?",
+            options: ["(a) A black hole is a region of space-time where gravity is so strong that nothing - not even light or other electromagnetic waves - has enough energy to escape it", "(b) Black holes are formed only by collapsing stars", "(c) They were first theorized by Albert Einstein in his General Theory of Relativity", "(d) All of the above"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Option (a) is the fundamental definition of a black hole. While many are formed by collapsing stars, they can also be primordial. Einstein's theory provided the framework, but Karl Schwarzschild found the first solutions.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 56,
+            question_text: "Consider the following statements: 1. Only the Lok Sabha can introduce a Money Bill. 2. The Rajya Sabha has the power to reject a Money Bill. 3. The Speaker of Lok Sabha is the final authority to decide whether a bill is a Money Bill or not. 4. The Rajya Sabha has no power to amend a Money Bill.",
+            options: ["(a) 1, 2 and 3 only", "(b) 1 and 3 only", "(c) 1, 3 and 4 only", "(d) 1, 2, 3 and 4"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "Money bills can only be introduced in Lok Sabha (1). The Speaker's decision is final (3). Rajya Sabha cannot amend or reject it; it can only make recommendations (4). Statement 2 is incorrect.",
+            subject_area: "Indian Polity"
+        },
+        {
+            original_serial: 57,
+            question_text: "What is 'Bitcoin'?",
+            options: ["(a) A kind of computer virus", "(b) A digital or crypto-currency", "(c) An electronic payment system", "(d) Both (b) and (c)"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Bitcoin is a decentralized digital currency, also known as a cryptocurrency, that can be transferred on the peer-to-peer bitcoin network.",
+            subject_area: "Science and Technology"
+        },
+        {
+            original_serial: 58,
+            question_text: "Which of the following are the functions of the Reserve Bank of India (RBI)? 1. Banker to the Government 2. Banker to the Banks 3. Custodian of foreign exchange reserves 4. Controller of credit",
+            options: ["(a) 1 and 2 only", "(b) 1, 2 and 3 only", "(c) 1, 2, 3 and 4", "(d) 2, 3 and 4 only"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The RBI performs all these functions: it acts as a banker to both central and state governments, regulates commercial banks, manages foreign exchange, and controls the credit and money supply in the economy.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 59,
+            question_text: "What is the approximate velocity of sound in air at 0°C and 1 atm pressure?",
+            options: ["(a) 331 m/s", "(b) 340 m/s", "(c) 350 m/s", "(d) 360 m/s"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The speed of sound in dry air at 0 °C (32 °F) is 331.2 meters per second.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 60,
+            question_text: "The process of the Sun converting Hydrogen into Helium is called",
+            options: ["(a) Nuclear Fission", "(b) Nuclear Fusion", "(c) Ionization", "(d) Oxidation"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Nuclear fusion is the process by which two light atomic nuclei combine to form a single heavier one while releasing massive amounts of energy. This is the process that powers the Sun.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 61,
+            question_text: "What is the approximate distance of the Sun from the Earth?",
+            options: ["(a) 100 million km", "(b) 120 million km", "(c) 150 million km", "(d) 180 million km"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The average distance from the Earth to the Sun is about 149.6 million kilometers, which is also known as one Astronomical Unit (AU).",
+            subject_area: "Geography"
+        },
+        {
+            original_serial: 62,
+            question_text: "Who coined the term 'Genetic Engineering'?",
+            options: ["(a) Walter Gilbert", "(b) Herbert Boyer", "(c) Stanley Cohen", "(d) Jack Williamson"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The term 'genetic engineering' was coined by Jack Williamson in his 1951 science fiction novel 'Dragon's Island'.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 63,
+            question_text: "What is the theme of the 'World Environment Day' 2016?",
+            options: ["(a) Raise your voice, not the sea level", "(b) Go Wild for Life", "(c) Seven Billion Dreams. One Planet. Consume with Care", "(d) Think. Eat. Save."],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "The theme for World Environment Day 2016 was 'Go Wild for Life', focusing on the illegal trade in wildlife.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 64,
+            question_text: "Consider the following statements about 'Doping': 1. Doping in sports is the use of prohibited substances to enhance performance. 2. The World Anti-Doping Agency (WADA) is the global body that monitors and regulates doping in sports. 3. The National Anti-Doping Agency (NADA) is the body in India that monitors and regulates doping in sports.",
+            options: ["(a) 1 and 2 only", "(b) 1, 2 and 3 only", "(c) All of the above are correct.", "(d) None of the above"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "All three statements provided are correct definitions and roles of Doping, WADA, and NADA respectively.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 65,
+            question_text: "Which of the following is not a member of the SAARC?",
+            options: ["(a) Bhutan", "(b) Pakistan", "(c) Myanmar", "(d) Maldives"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "Myanmar is a member of ASEAN, not SAARC. The members of SAARC are Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan, and Sri Lanka.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 66,
+            question_text: "What is the currency of Japan?",
+            options: ["(a) Yen", "(b) Yuan", "(c) Ruble", "(d) Won"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The official currency of Japan is the Japanese Yen (JPY).",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 67,
+            question_text: "The world's first solar-powered commercial flight took place in",
+            options: ["(a) 2012", "(b) 2013", "(c) 2014", "(d) 2015"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The Solar Impulse 2 aircraft began its round-the-world journey in March 2015, marking a significant milestone in solar-powered aviation.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 68,
+            question_text: 'The "International Day of Yoga" is celebrated on',
+            options: ["(a) 21st May", "(b) 21st June", "(c) 21st July", "(d) 21st August"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "The United Nations proclaimed 21 June as the International Day of Yoga in 2014. It coincides with the Summer Solstice.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 69,
+            question_text: "Which of the following is not a form of carbon?",
+            options: ["(a) Diamond", "(b) Graphite", "(c) Fullerene", "(d) Silica"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Silica is silicon dioxide (SiO₂). Diamond, graphite, and fullerene are all allotropes (different structural forms) of carbon.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 70,
+            question_text: "What is the main component of Natural Gas?",
+            options: ["(a) Methane", "(b) Ethane", "(c) Propane", "(d) Butane"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Natural gas is primarily composed of methane (CH₄), typically accounting for 70-90% of its composition.",
+            subject_area: "Science"
+        },
+        {
+            original_serial: 71,
+            question_text: "What is the 'Sunderbans'?",
+            options: ["(a) A mountain range in the Himalayas", "(b) A tropical rainforest", "(c) The largest mangrove forest in the world", "(d) A wildlife sanctuary"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The Sundarbans, located in the delta of the Ganges, Brahmaputra, and Meghna rivers on the Bay of Bengal, is the world's largest mangrove forest.",
+            subject_area: "Geography"
+        },
+        {
+            original_serial: 72,
+            question_text: "What is the capital of Australia?",
+            options: ["(a) Sydney", "(b) Melbourne", "(c) Canberra", "(d) Perth"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "Canberra is the capital city of Australia. Sydney and Melbourne are larger cities, but Canberra was chosen as a compromise between the two rivals.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 73,
+            question_text: "The 'Dravidian style' of architecture is found in",
+            options: ["(a) North India", "(b) South India", "(c) East India", "(d) West India"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Dravidian architecture is a style of Hindu temple architecture that emerged in the southern part of the Indian subcontinent.",
+            subject_area: "History"
+        },
+        {
+            original_serial: 74,
+            question_text: "What is the 'World Bank'?",
+            options: ["(a) An international financial institution", "(b) A regional financial institution", "(c) A national financial institution", "(d) A private bank"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The World Bank is an international financial institution that provides loans and grants to the governments of low- and middle-income countries for the purpose of pursuing capital projects.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 75,
+            question_text: "What is the 'IMF'?",
+            options: ["(a) International Monetary Fund", "(b) Indian Medical Foundation", "(c) International Maritime Federation", "(d) Indian Monetary Fund"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "IMF stands for the International Monetary Fund, an international organization that promotes global economic growth and financial stability.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 76,
+            question_text: "The 'Right to Information Act' was enacted in",
+            options: ["(a) 2002", "(b) 2003", "(c) 2004", "(d) 2005"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The Right to Information (RTI) Act was passed by the Parliament of India on 15 June 2005 and came fully into force on 12 October 2005.",
+            subject_area: "Indian Polity"
+        },
+        {
+            original_serial: 77,
+            question_text: "What is 'GST'?",
+            options: ["(a) Goods and Services Tax", "(b) Global Sales Tax", "(c) General Sales Tax", "(d) General Services Tax"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "GST stands for Goods and Services Tax, an indirect tax used in India on the supply of goods and services.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 78,
+            question_text: "Which of the following is not a part of the 'Seven Wonders of the World'?",
+            options: ["(a) The Great Wall of China", "(b) The Taj Mahal", "(c) The Colosseum", "(d) The Eiffel Tower"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The Eiffel Tower is not on the list of the New7Wonders of the World. The other three are on the list.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 79,
+            question_text: "What is the 'G20'?",
+            options: ["(a) A group of 20 major economies", "(b) A group of 20 developing countries", "(c) A group of 20 developed countries", "(d) A group of 20 international organizations"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The G20 is an intergovernmental forum comprising 19 countries and the European Union, which works to address major issues related to the global economy.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 80,
+            question_text: "The 'Swachh Bharat Abhiyan' was launched on",
+            options: ["(a) 2nd October 2014", "(b) 15th August 2014", "(c) 26th January 2015", "(d) 14th November 2014"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Swachh Bharat Mission was launched on 2nd October 2014, the birth anniversary of Mahatma Gandhi, to accelerate efforts to achieve universal sanitation coverage.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 81,
+            question_text: "What is the 'Pradhan Mantri Jan Dhan Yojana'?",
+            options: ["(a) A scheme for providing financial assistance to the poor", "(b) A scheme for opening bank accounts for the poor", "(c) A scheme for providing free health insurance", "(d) A scheme for providing subsidized food grains"],
+            answer_index: 1,
+            year: "(2016 APFC)",
+            explanation: "Pradhan Mantri Jan Dhan Yojana (PMJDY) is India's National Mission for Financial Inclusion to ensure access to financial services, namely, a basic savings & deposit accounts, remittance, credit, insurance, pension in an affordable manner.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 82,
+            question_text: "Which of the following is a renewable source of energy?",
+            options: ["(a) Coal", "(b) Natural Gas", "(c) Solar Energy", "(d) Petroleum"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "Solar energy is a renewable source as it is derived from the sun's radiation and is naturally replenished.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 83,
+            question_text: "What is the 'Kyoto Protocol'?",
+            options: ["(a) An international treaty to reduce greenhouse gas emissions", "(b) An international treaty to protect the ozone layer", "(c) An international treaty to ban the use of nuclear weapons", "(d) An international treaty to protect biodiversity"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Kyoto Protocol was an international treaty that committed state parties to reduce greenhouse gas emissions, based on the scientific consensus that global warming is occurring and it is extremely likely that human-made CO2 emissions have predominantly caused it.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 84,
+            question_text: "What is the 'Paris Agreement'?",
+            options: ["(a) An international agreement to combat climate change", "(b) An international agreement to promote free trade", "(c) An international agreement to protect human rights", "(d) An international agreement to reduce poverty"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Paris Agreement is a legally binding international treaty on climate change. Its goal is to limit global warming to well below 2, preferably to 1.5 degrees Celsius, compared to pre-industrial levels.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 85,
+            question_text: "The 'NITI Aayog' replaced the",
+            options: ["(a) Planning Commission", "(b) Finance Commission", "(c) Election Commission", "(d) Union Public Service Commission"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The NITI Aayog (National Institution for Transforming India) was formed via a resolution of the Union Cabinet on January 1, 2015, to replace the Planning Commission.",
+            subject_area: "Indian Polity"
+        },
+        {
+            original_serial: 86,
+            question_text: "What is the 'Make in India' initiative?",
+            options: ["(a) A campaign to encourage multinational companies to manufacture their products in India", "(b) A campaign to promote domestic industries", "(c) A campaign to promote exports", "(d) A campaign to promote foreign direct investment"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Make in India is a major national programme of the Government of India designed to facilitate investment, foster innovation, enhance skill development, and build best-in-class manufacturing infrastructure in the country.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 87,
+            question_text: "What is the 'National Food Security Act'?",
+            options: ["(a) An act to provide food security to the poor", "(b) An act to provide food security to all", "(c) An act to provide subsidized food grains to the poor", "(d) An act to provide free food grains to the poor"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The National Food Security Act, 2013 aims to provide for food and nutritional security by ensuring access to an adequate quantity of quality food at affordable prices to people to live a life with dignity. It provides for subsidized food grains.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 88,
+            question_text: "Which of the following is a part of the 'Digital India' initiative?",
+            options: ["(a) Digital Locker", "(b) MyGov", "(c) e-Aadhaar", "(d) All of the above"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "Digital Locker, MyGov platform, and e-Aadhaar services are all key components of the broader Digital India initiative launched by the Government of India.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 89,
+            question_text: "What is the 'Ease of Doing Business' index?",
+            options: ["(a) An index that ranks countries on their business environment", "(b) An index that measures the ease of starting a business", "(c) An index that measures the ease of paying taxes", "(d) An index that measures the ease of getting credit"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Ease of Doing Business index was an index created by the World Bank Group. Higher rankings (a lower numerical value) indicated better, usually simpler, regulations for businesses and stronger protections of property rights.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 90,
+            question_text: "What is the 'Start-up India' initiative?",
+            options: ["(a) A campaign to promote entrepreneurship", "(b) A campaign to promote foreign direct investment", "(c) A campaign to promote exports", "(d) A campaign to promote domestic industries"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Startup India is a flagship initiative of the Government of India, intended to build a strong ecosystem for nurturing innovation and Startups in the country that will drive sustainable economic growth and generate large scale employment opportunities.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 91,
+            question_text: "What is the 'Smart Cities Mission'?",
+            options: ["(a) A mission to develop smart cities in India", "(b) A mission to develop smart villages in India", "(c) A mission to develop smart infrastructure in India", "(d) A mission to develop smart transportation in India"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Smart Cities Mission is an urban renewal and retrofitting program by the Government of India with the mission to develop 100 cities across the country making them citizen friendly and sustainable.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 92,
+            question_text: "What is the 'AMRUT' scheme?",
+            options: ["(a) Atal Mission for Rejuvenation and Urban Transformation", "(b) Atal Mission for Rural Transformation", "(c) Atal Mission for Urban Renewal", "(d) Atal Mission for Rural Renewal"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "AMRUT stands for Atal Mission for Rejuvenation and Urban Transformation. The scheme's purpose is to ensure that every household has access to a tap with an assured supply of water and a sewerage connection.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 93,
+            question_text: "What is the 'National Health Mission'?",
+            options: ["(a) A mission to provide universal health coverage", "(b) A mission to provide free health insurance", "(c) A mission to provide subsidized health care", "(d) A mission to provide free health care"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Health Mission (NHM) of the Government of India aims to achieve universal access to equitable, affordable, and quality health care services.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 94,
+            question_text: "What is the 'Pradhan Mantri Awas Yojana'?",
+            options: ["(a) A scheme for providing housing for all", "(b) A scheme for providing subsidized housing", "(c) A scheme for providing free housing", "(d) A scheme for providing housing for the poor"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Pradhan Mantri Awas Yojana (PMAY) is a credit-linked subsidy scheme by the Government of India with the aim of providing affordable housing to the urban poor with a target of building 20 million affordable houses by 31 March 2022.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 95,
+            question_text: "What is the 'Skill India' initiative?",
+            options: ["(a) A campaign to provide skill training to the youth", "(b) A campaign to promote entrepreneurship", "(c) A campaign to promote foreign direct investment", "(d) A campaign to promote domestic industries"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Skill India is a campaign launched by the Prime Minister of India on 15 July 2015 with an aim to train over 40 crore people in India in different skills by 2022.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 96,
+            question_text: "What is the 'Sansad Adarsh Gram Yojana'?",
+            options: ["(a) A scheme for the development of villages", "(b) A scheme for the development of smart cities", "(c) A scheme for the development of smart villages", "(d) A scheme for the development of rural areas"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "Under the Sansad Adarsh Gram Yojana, each Member of Parliament will take the responsibility of developing physical and institutional infrastructure in three villages by 2019.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 97,
+            question_text: "What is the 'Pradhan Mantri Fasal Bima Yojana'?",
+            options: ["(a) A crop insurance scheme for farmers", "(b) A health insurance scheme for farmers", "(c) A life insurance scheme for farmers", "(d) A pension scheme for farmers"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Pradhan Mantri Fasal Bima Yojana is the government-sponsored crop insurance scheme that integrates multiple stakeholders on a single platform.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 98,
+            question_text: "What is the 'Pradhan Mantri Krishi Sinchayee Yojana'?",
+            options: ["(a) A scheme for providing irrigation facilities to farmers", "(b) A scheme for providing crop insurance to farmers", "(c) A scheme for providing subsidized seeds to farmers", "(d) A scheme for providing loans to farmers"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Pradhan Mantri Krishi Sinchayee Yojana has been formulated with the vision of extending the coverage of irrigation and improving water use efficiency 'More crop per drop'.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 99,
+            question_text: "What is the 'National e-Governance Plan'?",
+            options: ["(a) A plan to provide e-governance services to citizens", "(b) A plan to provide e-governance services to businesses", "(c) A plan to provide e-governance services to the government", "(d) All of the above"],
+            answer_index: 3,
+            year: "(2016 APFC)",
+            explanation: "The National e-Governance Plan of the Indian Government seeks to make all government services available to the citizens of India via electronic media.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 100,
+            question_text: "What is the 'National Education Policy'?",
+            options: ["(a) A policy to provide free education to all", "(b) A policy to provide compulsory education to all", "(c) A policy to provide quality education to all", "(d) A policy to provide vocational education to all"],
+            answer_index: 2,
+            year: "(2016 APFC)",
+            explanation: "The National Education Policy is a comprehensive framework to guide the development of education in the country. A major goal is to provide high-quality education to all.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 101,
+            question_text: "What is the 'Bharat Net' project?",
+            options: ["(a) A project to provide broadband connectivity to all villages", "(b) A project to provide internet connectivity to all cities", "(c) A project to provide mobile connectivity to all villages", "(d) A project to provide mobile connectivity to all cities"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "BharatNet is a project of the Government of India to provide broadband connectivity to all the 2.5 lakh gram panchayats in the country.",
+            subject_area: "Current Affairs"
+        },
+        {
+            original_serial: 102,
+            question_text: "What is the 'National Food Processing Mission'?",
+            options: ["(a) A mission to promote the food processing industry", "(b) A mission to provide food security to all", "(c) A mission to provide subsidized food grains", "(d) A mission to provide free food grains"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission on Food Processing aims to decentralize the implementation of the schemes for food processing and enhance the participation of States/UTs.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 103,
+            question_text: "What is the 'National Health Portal'?",
+            options: ["(a) A portal to provide health information to citizens", "(b) A portal to provide health services to citizens", "(c) A portal to provide health insurance to citizens", "(d) A portal to provide health care to citizens"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Health Portal of India is a gateway to authentic health information for citizens, students, healthcare professionals and researchers.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 104,
+            question_text: "What is the 'National Urban Livelihood Mission'?",
+            options: ["(a) A mission to provide livelihood to the urban poor", "(b) A mission to provide livelihood to the rural poor", "(c) A mission to provide livelihood to the urban unemployed", "(d) A mission to provide livelihood to the rural unemployed"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Urban Livelihoods Mission (NULM) aims to reduce poverty and vulnerability of the urban poor households by enabling them to access gainful self-employment and skilled wage employment opportunities.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 105,
+            question_text: "What is the 'National Skill Development Corporation'?",
+            options: ["(a) A corporation to promote skill development", "(b) A corporation to promote entrepreneurship", "(c) A corporation to promote foreign direct investment", "(d) A corporation to promote domestic industries"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "National Skill Development Corporation India (NSDC) was set up as a one of its kind, Public Private Partnership in India. It aims to promote skill development by catalysing creation of large, quality and for-profit vocational institutions.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 106,
+            question_text: "What is the 'National Water Mission'?",
+            options: ["(a) A mission to conserve water", "(b) A mission to provide clean drinking water", "(c) A mission to provide irrigation facilities", "(d) A mission to provide water for industrial use"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The main objective of the National Water Mission is 'conservation of water, minimizing wastage and ensuring its more equitable distribution both across and within States through integrated water resources development and management'.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 107,
+            question_text: "What is the 'National Solar Mission'?",
+            options: ["(a) A mission to promote solar energy", "(b) A mission to promote wind energy", "(c) A mission to promote hydro energy", "(d) A mission to promote geothermal energy"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Jawaharlal Nehru National Solar Mission is a major initiative of the Government of India and State Governments to promote ecologically sustainable growth while addressing India’s energy security challenge.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 108,
+            question_text: "What is the 'National Mission for Clean Ganga'?",
+            options: ["(a) A mission to clean the Ganga river", "(b) A mission to clean the Yamuna river", "(c) A mission to clean the Godavari river", "(d) A mission to clean the Krishna river"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission for Clean Ganga is the implementation wing of National Ganga River Basin Authority. It is a registered society and acts as a coordinating body for the states' implementation agencies.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 109,
+            question_text: "What is the 'National Mission on Sustainable Agriculture'?",
+            options: ["(a) A mission to promote sustainable agriculture", "(b) A mission to promote organic farming", "(c) A mission to promote traditional farming", "(d) A mission to promote modern farming"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission for Sustainable Agriculture (NMSA) has been formulated for enhancing agricultural productivity especially in rainfed areas focusing on integrated farming, water use efficiency, soil health management and synergizing resource conservation.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 110,
+            question_text: "What is the 'National Mission on Himalayan Studies'?",
+            options: ["(a) A mission to study the Himalayas", "(b) A mission to study the Western Ghats", "(c) A mission to study the Eastern Ghats", "(d) A mission to study the Aravallis"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission on Himalayan Studies (NMHS) is a new Central Sector Grant-in-aid Scheme. The Mission is expected to provide a much needed focus on the issues relating to the conservation of the Himalayan Ecosystem.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 111,
+            question_text: "What is the 'National Mission on Strategic Knowledge for Climate Change'?",
+            options: ["(a) A mission to provide knowledge for climate change", "(b) A mission to provide knowledge for environmental protection", "(c) A mission to provide knowledge for sustainable development", "(d) A mission to provide knowledge for biodiversity conservation"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission on Strategic Knowledge for Climate Change aims to build a dynamic and vibrant knowledge system that informs and supports national action for responding effectively to the challenge of climate change.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 112,
+            question_text: "What is the 'National Mission on Sustainable Habitat'?",
+            options: ["(a) A mission to promote sustainable habitat", "(b) A mission to promote sustainable development", "(c) A mission to promote sustainable environment", "(d) A mission to promote sustainable living"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission on Sustainable Habitat seeks to promote sustainability of habitats through improvements in energy efficiency in buildings, urban planning, improved management of solid and liquid waste, etc.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 113,
+            question_text: "What is the 'National Mission on Enhanced Energy Efficiency'?",
+            options: ["(a) A mission to promote energy efficiency", "(b) A mission to promote energy conservation", "(c) A mission to promote renewable energy", "(d) A mission to promote clean energy"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission for Enhanced Energy Efficiency is one of the eight national missions under the National Action Plan on Climate Change (NAPCC). NMEEE aims to strengthen the market for energy efficiency.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 114,
+            question_text: "What is the 'National Mission on Green India'?",
+            options: ["(a) A mission to increase forest cover", "(b) A mission to increase green cover", "(c) A mission to increase tree cover", "(d) A mission to increase plant cover"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The Green India Mission is one of the eight Missions under the National Action Plan on Climate Change. It aims at protecting, restoring and enhancing India's diminishing forest cover and responding to climate change.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 115,
+            question_text: "What is the 'National Mission on Sustainable Transport'?",
+            options: ["(a) A mission to promote sustainable transport", "(b) A mission to promote public transport", "(c) A mission to promote green transport", "(d) A mission to promote clean transport"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The National Mission on Sustainable Transport aims to develop a sustainable transport system through a combination of measures such as promoting energy efficient and low carbon transport systems and services.",
+            subject_area: "Environment"
+        },
+        {
+            original_serial: 116,
+            question_text: "What is the 'National Mission on Sustainable Tourism'?",
+            options: ["(a) A mission to promote sustainable tourism", "(b) A mission to promote eco-tourism", "(c) A mission to promote rural tourism", "(d) A mission to promote cultural tourism"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "The mission aims to position tourism as a vehicle for sustainable development, focusing on environmentally friendly practices, conservation of heritage and culture, and generating local livelihoods.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 117,
+            question_text: "What is the 'National Mission on Sustainable Development Goals'?",
+            options: ["(a) A mission to achieve the sustainable development goals", "(b) A mission to achieve the millennium development goals", "(c) A mission to achieve the sustainable development goals", "(d) A mission to achieve the millennium development goals"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "India's national missions are aligned with achieving the Sustainable Development Goals (SDGs) set by the United Nations, covering areas like poverty, health, education, and environment.",
+            subject_area: "General Knowledge"
+        },
+        {
+            original_serial: 118,
+            question_text: "What is the 'National Mission on Sustainable Livelihoods'?",
+            options: ["(a) A mission to provide sustainable livelihoods to the poor", "(b) A mission to provide sustainable livelihoods to the rural poor", "(c) A mission to provide sustainable livelihoods to the urban poor", "(d) A mission to provide sustainable livelihoods to all"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "This mission, often linked with programs like NRLM and NULM, focuses on creating and supporting sustainable livelihood opportunities for the poor, reducing their dependence on fragile ecosystems.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 119,
+            question_text: "What is the 'National Mission on Sustainable Food Security'?",
+            options: ["(a) A mission to provide sustainable food security to all", "(b) A mission to provide sustainable food security to the poor", "(c) A mission to provide sustainable food security to the rural poor", "(d) A mission to provide sustainable food security to the urban poor"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "This broad goal is addressed by multiple missions, including the National Food Security Act and the National Mission for Sustainable Agriculture, aiming to ensure long-term food availability and access.",
+            subject_area: "Indian Economy"
+        },
+        {
+            original_serial: 120,
+            question_text: "What is the 'National Mission on Sustainable Water Resources'?",
+            options: ["(a) A mission to manage water resources sustainably", "(b) A mission to provide water for drinking", "(c) A mission to provide water for irrigation", "(d) A mission to provide water for industrial use"],
+            answer_index: 0,
+            year: "(2016 APFC)",
+            explanation: "This is a key objective covered by the National Water Mission, which aims for integrated water resource management for conservation, equitable distribution, and efficiency.",
+            subject_area: "Environment"
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+    let score = 0;
+    let quizQuestions = [];
+    let timerInterval = null;
+    let timeElapsed = 0;
+    let isPaused = false;
+    let totalTimeLimit = 120 * 60;
+
+    // DOM Elements
+    const quizSettings = document.getElementById('quiz-settings');
+    const quizContainer = document.getElementById('quiz-container');
+    const resultsContainer = document.getElementById('results-container');
+    const explanationContainer = document.getElementById('explanation-container');
+    const startQuizBtn = document.getElementById('start-quiz');
+    const restartQuizBtn = document.getElementById('restart-quiz');
+    const pauseTimerBtn = document.getElementById('pause-timer');
+    const exitQuizBtn = document.getElementById('exit-quiz-btn');
+    const prevQuestionBtn = document.getElementById('prev-question');
+    const nextQuestionBtn = document.getElementById('next-question');
+    const questionTextEl = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const questionSerialInfoEl = document.getElementById('question-serial-info');
+    const questionYearEl = document.getElementById('question-year'); // Still selecting the element
+    const timerEl = document.getElementById('timer');
+    const finalScoreEl = document.getElementById('final-score');
+    const correctAnswersEl = document.getElementById('correct-answers');
+    const incorrectAnswersEl = document.getElementById('incorrect-answers');
+    const unattemptedQuestionsEl = document.getElementById('unattempted-questions');
+    const finalTimeTextEl = document.getElementById('final-time-text');
+    const resultPromptEl = document.getElementById('result-prompt');
+    const explanationTextEl = document.getElementById('explanation-text');
+    const questionCountInput = document.getElementById('question-count');
+    const timeLimitInput = document.getElementById('time-limit');
+    const shuffleModeRadio = document.getElementById('shuffle-mode');
+    const improvementList = document.getElementById('improvement-list');
+    const whatsappShareBtn = document.getElementById('whatsapp-share');
+    const telegramShareBtn = document.getElementById('telegram-share');
+
+    // Utility Functions
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+        return `${formattedMinutes}:${formattedSeconds}`;
+    }
+
+    function startTimer() {
+        if (!timerInterval) {
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    const displayTime = totalTimeLimit - timeElapsed;
+                    if (displayTime <= 0) {
+                        timerEl.textContent = "00:00";
+                        showResults();
+                    } else {
+                        timerEl.textContent = formatTime(displayTime);
+                    }
+                    timeElapsed++;
+                }
+            }, 1000);
+        }
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        pauseTimerBtn.textContent = isPaused ? 'Resume' : 'Pause';
+        if (isPaused) {
+            pauseTimerBtn.classList.add('bg-yellow-400', 'hover:bg-yellow-500');
+        } else {
+            pauseTimerBtn.classList.remove('bg-yellow-400', 'hover:bg-yellow-500');
+        }
+    }
+
+    function initQuiz() {
+        const questionCount = parseInt(questionCountInput.value, 10);
+        const timeLimit = timeLimitInput.value ? parseInt(timeLimitInput.value, 10) : 120;
+        const isShuffleMode = shuffleModeRadio.checked;
+
+        let tempQuestions = [...allQuestions];
+
+        if (isShuffleMode) {
+            shuffleArray(tempQuestions);
+        }
+
+        quizQuestions = tempQuestions.slice(0, questionCount);
+        userAnswers = Array(quizQuestions.length).fill(null);
+        currentQuestionIndex = 0;
+        score = 0;
+        timeElapsed = 0;
+        isPaused = false;
+        totalTimeLimit = timeLimit * 60;
+        
+        quizSettings.classList.add('hidden');
+        quizContainer.classList.remove('hidden');
+        resultsContainer.classList.add('hidden');
+        
+        timerEl.textContent = formatTime(totalTimeLimit);
+        pauseTimerBtn.textContent = 'Pause';
+        
+        startTimer();
+        displayQuestion();
+    }
+
+    function displayQuestion() {
+        explanationContainer.classList.add('hidden');
+        if (currentQuestionIndex >= quizQuestions.length) {
+            showResults();
+            return;
+        }
+
+        const questionData = quizQuestions[currentQuestionIndex];
+        const { original_serial, question_text, options } = questionData; // Removed 'year' from destructuring since we won't use it for display
+        
+        let serialText = `${original_serial}`;
+        if (shuffleModeRadio.checked) {
+            serialText += ` (${currentQuestionIndex + 1} of ${quizQuestions.length})`;
+        } else {
+             serialText += ` of ${quizQuestions.length}`;
+        }
+        questionSerialInfoEl.textContent = serialText;
+        
+        // 3. Remove the Year Display by clearing the element's content
+        questionYearEl.textContent = ''; 
+
+        questionTextEl.innerHTML = question_text.replace(/\n/g, '<br>');
+        optionsContainer.innerHTML = '';
+        
+        optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+        if (question_text.toLowerCase().includes('statement') || question_text.toLowerCase().includes('chronological')) {
+            optionsContainer.classList.add('statement-options');
+        }
+
+        options.forEach((option, index) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'quiz-option';
+            const optionSpan = document.createElement('span');
+            optionSpan.className = 'option-text';
+            optionSpan.innerHTML = option.replace(/\n/g, '<br>');
+            optionDiv.appendChild(optionSpan);
+            
+            const userAnswer = userAnswers[currentQuestionIndex];
+            if (userAnswer !== null) {
+                optionDiv.style.cursor = 'default';
+                 if (index === questionData.answer_index) {
+                    optionDiv.classList.add('correct');
+                } else if (index === userAnswer) {
+                    optionDiv.classList.add('incorrect');
+                }
+            } else {
+                optionDiv.onclick = () => selectOption(index);
+            }
+            
+            optionsContainer.appendChild(optionDiv);
+        });
+
+        updateNavigationButtons();
+        if (userAnswers[currentQuestionIndex] !== null) {
+            displayExplanation();
+        }
+    }
+    
+    function updateNavigationButtons() {
+        prevQuestionBtn.disabled = currentQuestionIndex === 0;
+        prevQuestionBtn.classList.toggle('opacity-50', prevQuestionBtn.disabled);
+        nextQuestionBtn.textContent = currentQuestionIndex === quizQuestions.length - 1 ? 'Finish' : 'Next';
+    }
+
+    function selectOption(selectedIndex) {
+        userAnswers[currentQuestionIndex] = selectedIndex;
+        displayExplanation();
+        const options = optionsContainer.querySelectorAll('.quiz-option');
+        options.forEach(opt => opt.onclick = null); // Disable further clicks
+    }
+
+    function displayExplanation() {
+        const questionData = quizQuestions[currentQuestionIndex];
+        const selectedAnswer = userAnswers[currentQuestionIndex];
+        
+        if (selectedAnswer !== null) {
+            const isCorrect = selectedAnswer === questionData.answer_index;
+            const correctOptionText = questionData.options[questionData.answer_index];
+            
+            resultPromptEl.textContent = isCorrect ? 'Correct!' : 'Incorrect!';
+            resultPromptEl.className = isCorrect ? 'correct-prompt' : 'incorrect-prompt';
+            
+            explanationTextEl.innerHTML = `<p class="font-semibold mb-2">The correct answer is ${correctOptionText}.</p><p>${questionData.explanation}</p>`;
+            explanationTextEl.className = `p-4 rounded-md border ${isCorrect ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`;
+
+            explanationContainer.classList.remove('hidden');
+
+            const options = optionsContainer.querySelectorAll('.quiz-option');
+            options.forEach((optionDiv, index) => {
+                 if (index === questionData.answer_index) {
+                    optionDiv.classList.add('correct');
+                } else if (index === selectedAnswer) {
+                    optionDiv.classList.add('incorrect');
+                }
+            });
+        }
+    }
+    
+    function showResults() {
+        stopTimer();
+        quizContainer.classList.add('hidden');
+        explanationContainer.classList.add('hidden');
+        resultsContainer.classList.remove('hidden');
+
+        let correctCount = 0;
+        let incorrectCount = 0;
+        const subjectPerformance = {};
+
+        quizQuestions.forEach((q, index) => {
+            const subject = q.subject_area;
+            if (!subjectPerformance[subject]) {
+                subjectPerformance[subject] = { correct: 0, total: 0 };
+            }
+            subjectPerformance[subject].total++;
+
+            const userAns = userAnswers[index];
+            if (userAns !== null) {
+                if (userAns === q.answer_index) {
+                    correctCount++;
+                    subjectPerformance[subject].correct++;
+                } else {
+                    incorrectCount++;
+                }
+            }
+        });
+        
+        let unattemptedCount = quizQuestions.length - (correctCount + incorrectCount);
+        score = (correctCount * 2.5) - (incorrectCount * 0.83);
+        
+        finalScoreEl.textContent = score.toFixed(2);
+        correctAnswersEl.textContent = correctCount;
+        incorrectAnswersEl.textContent = incorrectCount;
+        unattemptedQuestionsEl.textContent = unattemptedCount;
+        finalTimeTextEl.textContent = formatTime(timeElapsed - 1);
+        
+        improvementList.innerHTML = '';
+        const improvementAreas = [];
+        for (const subject in subjectPerformance) {
+            const perf = subjectPerformance[subject];
+            const accuracy = perf.total > 0 ? (perf.correct / perf.total) * 100 : 0;
+            if (accuracy < 60) { // Threshold for improvement
+                improvementAreas.push(subject);
+                const li = document.createElement('li');
+                li.textContent = `${subject} (Accuracy: ${accuracy.toFixed(0)}%)`;
+                improvementList.appendChild(li);
+            }
+        }
+
+        if (improvementAreas.length === 0) {
+            const li = document.createElement('li');
+            li.textContent = "Great job! You have a solid grasp on all attempted topics.";
+            improvementList.appendChild(li);
+        }
+
+        const shareText = `I just took the UPSC APFC 2016 quiz and my score is ${score.toFixed(2)}! Correct: ${correctCount}, Incorrect: ${incorrectCount}. Time: ${formatTime(timeElapsed-1)}. Areas to improve: ${improvementAreas.join(', ') || 'None'}. Try the quiz here: ${window.location.href}`;
+        const encodedText = encodeURIComponent(shareText);
+        
+        whatsappShareBtn.href = `https://wa.me/?text=${encodedText}`;
+        telegramShareBtn.href = `https://t.me/share/url?url=${encodeURIComponent('https://t.me/TheAspirantsGurukul')}&text=${encodedText}`; // Changed Telegram share to link to the channel
+    }
+    
+    // Event Listeners
+    startQuizBtn.addEventListener('click', initQuiz);
+    restartQuizBtn.addEventListener('click', () => {
+        resultsContainer.classList.add('hidden');
+        quizSettings.classList.remove('hidden');
+    });
+    
+    pauseTimerBtn.addEventListener('click', togglePause);
+    
+    nextQuestionBtn.addEventListener('click', () => {
+        if (!isPaused) {
+            if (currentQuestionIndex < quizQuestions.length -1){
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+    });
+
+    prevQuestionBtn.addEventListener('click', () => {
+        if (!isPaused && currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            displayQuestion();
+        }
+    });
+
+    exitQuizBtn.addEventListener('click', () => {
+        if (confirm("Are you sure you want to exit the quiz? Your progress will be saved and scored.")) {
+            showResults();
+        }
+    });
+});
+</script>
+</body>
+</html>
